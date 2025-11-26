@@ -4,7 +4,7 @@ const MongoDB_URI = process.env.MONGODB_URI;
 
 declare global {
     var mongooseCache: {
-        conn: typeof mongoose,
+        conn: typeof mongoose | null,
         promise: Promise<typeof mongoose> | null;
     };
 }
@@ -32,5 +32,5 @@ export const connectDB = async () => {
         throw err;
     }
 
-    console.log(`Connected to DB ${process.env.NODE_ENV} - ${MongoDB_URI}`);
+    console.log(`Connected to DB ${process.env.NODE_ENV}`);
 }
