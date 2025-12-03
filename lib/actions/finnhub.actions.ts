@@ -3,7 +3,11 @@
 import { getDateRange, validateArticle, formatArticle } from '@/lib/utils';
 
 const FINNHUB_BASE_URL = 'https://finnhub.io/api/v1';
-const NEXT_PUBLIC_FINNHUB_API_KEY = process.env.NEXT_PUBLIC_FINNHUB_API_KEY ?? '';
+const FINNHUB_API_KEY = process.env.FINNHUB_API_KEY ?? '';
+
+if (!FINNHUB_API_KEY) {
+    throw new Error('FINNHUB_API_KEY environment variable is required but not set');
+}
 
 type FetchOptions = {
     cache?: 'force-cache' | 'no-store';
@@ -48,7 +52,7 @@ export const getNews = async (symbols?: string[]): Promise<MarketNewsArticle[]> 
                 const symbol = cleanedSymbols[symbolIndex];
 
                 try {
-                    const url = `${FINNHUB_BASE_URL}/company-news?symbol=${symbol}&from=${from}&to=${to}&token=${NEXT_PUBLIC_FINNHUB_API_KEY}`;
+                    const url = `${FINNHUB_BASE_URL}/company-news?symbol=${symbol}&from=${from}&to=${to}&token=${FINNHUB_API_KEY}`;
                     const companyNews = await fetchJSON<RawNewsArticle[]>(url);
 
                     // Find first valid article not already collected
@@ -78,7 +82,7 @@ export const getNews = async (symbols?: string[]): Promise<MarketNewsArticle[]> 
         }
 
         // No symbols provided, fetch general market news
-        const url = `${FINNHUB_BASE_URL}/news?category=general&token=${NEXT_PUBLIC_FINNHUB_API_KEY}`;
+        const url = `${FINNHUB_BASE_URL}/news?category=general&token=${FINNHUB_API_KEY}`;
         const marketNews = await fetchJSON<RawNewsArticle[]>(url);
 
         // Deduplicate by id, url, and headline
