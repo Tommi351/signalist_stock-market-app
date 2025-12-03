@@ -9,5 +9,5 @@ if (!apiKey) {
 
 export const inngest = new Inngest({
     id: "signalist",
-    ai: { gemini: { apikey } },
+    ai: { gemini: { apiKey } },
 });
