@@ -1,62 +1,73 @@
 'use client';
 
-import {useForm} from "react-hook-form";
-import InputField from "@/components/forms/InputField";
-import FooterLink from "@/components/forms/FooterLink";
+import { useForm } from 'react-hook-form';
+import { Button } from '@/components/ui/button';
+import InputField from '@/components/forms/InputField';
+import FooterLink from '@/components/forms/FooterLink';
+import {toast} from "sonner";
+import {logInWithEmail} from "@/lib/actions/auth.actions";
+import {useRouter} from "next/navigation";
 
 const Login = () => {
+    const router = useRouter();
     const {
         register,
         handleSubmit,
-        control,
-        formState: {errors, isSubmitting },
+        formState: { errors, isSubmitting },
     } = useForm<SignInFormData>({
         defaultValues: {
             email: '',
             password: '',
         },
-        mode: 'onBlur'
-    }, );
+        mode: 'onBlur',
+    });
+
     const onSubmit = async (data: SignInFormData) => {
         try {
-            console.log('Sign In', data);
+            const result = await logInWithEmail(data);
+            if (result.success) {
+                router.push('/');
+                console.log("SUBMITTED");
+            }
+        } catch (e) {
+            console.error(e);
+            toast.error('Sign in failed', {
+                description: e instanceof Error ? e.message : 'Failed to login user.'
+            })
         }
-        catch (error) {
-            console.log(error)
-        }
-    }
+    };
+
     return (
         <>
-            <h1 className="form-title">Log In Into Your Account</h1>
+            <h1 className="form-title">Welcome back</h1>
 
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
                 <InputField
                     name="email"
                     label="Email"
-                    type="email"
-                    placeholder="Enter your email"
+                    placeholder="contact@jsmastery.com"
                     register={register}
                     error={errors.email}
-                    validation={{required: 'Email name is required', pattern: /^\w+@\w+$/, message: 'Email address is required'}}
-                    />
+                    validation={{ required: 'Email is required', pattern: /^\w+@\w+\.\w+$/ }}
+                />
 
-                 <InputField
-                     name="password"
-                     label="Password"
-                     type="password"
-                     placeholder="Enter a strong password"
-                     register={register}
-                     error={errors.password}
-                     validation={{required: 'Password is required', pattern: /^\w+@\w+$/, minLength: 8}}
-                     />
+                <InputField
+                    name="password"
+                    label="Password"
+                    placeholder="Enter your password"
+                    type="password"
+                    register={register}
+                    error={errors.password}
+                    validation={{ required: 'Password is required', minLength: 8 }}
+                />
 
-                  <button type="submit" disabled={isSubmitting} className="yellow-btn w-full mt-5">
-                      {isSubmitting ? 'Logging In...' : 'Log In'}
-                  </button>
+                <Button type="submit" disabled={isSubmitting} className="yellow-btn w-full mt-5">
+                    {isSubmitting ? 'Signing In' : 'Sign In'}
+                </Button>
 
-                <FooterLink text="Don't have an account?" linkText="Sign Up" href="/sign-up" />
+                <FooterLink text="Don't have an account?" linkText="Create an account" href="/sign-up" />
             </form>
         </>
-    )
-}
+    );
+};
 export default Login;
