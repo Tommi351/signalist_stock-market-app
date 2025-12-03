@@ -1,6 +1,6 @@
 import dotenv from 'dotenv';
 dotenv.config(); // <-- loads .env before anything else
-import { connectDB } from './mongoose';
+import { connectDB } from './database/mongoose';
 import mongoose from 'mongoose';
 
 async function testConnection() {
