@@ -2,8 +2,6 @@ import {Inngest} from "inngest";
 import dotenv from "dotenv";
 dotenv.config();
 
-export const inngest = new Inngest({
-    id: "signalist",
 const apiKey = process.env.GEMINI_API_KEY;
 if (!apiKey) {
   throw new Error('GEMINI_API_KEY environment variable is required but not set');
@@ -12,5 +10,4 @@ if (!apiKey) {
 export const inngest = new Inngest({
     id: "signalist",
     ai: { gemini: { apikey } },
-});
 });
