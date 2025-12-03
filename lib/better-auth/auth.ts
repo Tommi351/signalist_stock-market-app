@@ -20,10 +20,10 @@ export const getAuth = async () => {
         emailAndPassword: {
             enabled: true,
             disableSignUp: false,
-            requireEmailVerification: false,
+            requireEmailVerification: true,
             minPasswordLength: 8,
             maxPasswordLength: 128,
-            autoSignIn: true,
+            autoSignIn: false,
         },
         plugins: [nextCookies()],
     });
