@@ -1,8 +1,6 @@
 'use server'
 
 import {connectDB} from "@/database/mongoose";
-import {email} from "zod";
-import {$ne} from "sift";
 
 export const getAllUsersForNewsEmail = async () => {
     try {
