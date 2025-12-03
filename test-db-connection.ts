@@ -13,7 +13,7 @@ async function testConnection() {
         console.log('✅ Database connected successfully!');
         console.log('📊 Connection state:', mongoose.connection.readyState);
         console.log('🗄️  Database name:', mongoose.connection.name);
-        console.log('🌐 Connection string:', process.env.MONGODB_URL);
+        console.log('🌐 Connection string:', process.env.MONGODB_URI);
 
         // Test DB operations
         const db = mongoose.connection.db;
