@@ -24,7 +24,14 @@ export const signUpWithEmail = async ({ email, password, fullName, country, inve
 
 export const logInWithEmail = async ({ email, password }: SignInFormData) => {
     try {
-        const response = await auth.api.signInEmail({ body: { email, password } })
+        const response = await auth.api.signInEmail({ body: { email, password } });
+
+        if(response) {
+            await inngest.send({
+                name: 'app/user.loggedIn',
+                data: { email, password }
+            })
+        }
 
         return { success: true, data: response }
     } catch (e) {

@@ -5,12 +5,11 @@ import {useEffect, useState} from "react"
 import {
     CommandDialog,
     CommandEmpty,
-    CommandGroup,
     CommandInput,
-    CommandItem,
     CommandList,
 } from "@/components/ui/command"
 import {Button} from "@/components/ui/button";
+import WatchlistButton from "@/components/WatchListButton";
 import {Loader2, Star, TrendingUp} from "lucide-react";
 import Link from "next/link";
 import {searchStocks} from "@/lib/actions/finnhub.actions";
@@ -66,6 +65,14 @@ export default function SearchCommand({ renderAs = 'button', label = 'Add stock'
         setStocks(initialStocks);
     }
 
+    // Handle watchlist changes status change
+    const handleWatchListChange = async (symbol: string, isAdded: boolean) => {
+        // Update current stocks
+        setStocks(
+            initialStocks?.map((stock) => stock.symbol === symbol ? {...stock, isInWatchlist: isAdded} : stock) || []
+        );
+    };
+
     return (
         <>
             {renderAs === 'text' ? (
@@ -111,7 +118,12 @@ export default function SearchCommand({ renderAs = 'button', label = 'Add stock'
                                                 {stock.symbol} | {stock.exchange} | {stock.type}
                                             </div>
                                         </div>
-                                        <Star />
+                                        <WatchlistButton
+                                            symbol={stock.symbol}
+                                            company={stock.name}
+                                            isInWatchlist={stock.isInWatchlist}
+                                            onWatchlistChange={handleWatchListChange}
+                                        />
                                     </Link>
                                 </li>
                             ))}

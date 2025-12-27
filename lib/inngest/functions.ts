@@ -132,3 +132,16 @@ export const sendDailyNewsSummary = inngest.createFunction(
         return {success: true, message: 'News Summary email sent successfully'};
     }
 );
+
+export const sendUserAlert = inngest.createFunction(
+    { id: 'user-alert' },
+    { event: 'app/sent.alert'},
+    async ({ event, step }) => {
+        // Step #1: Get all users for news delivery
+        // Step #2: Fetch personalized news for each user
+        // Step #3: TODO - Summarize news using AI for each user
+        // This will use step.ai.infer() similar to sendSignUpEmail
+        // Step #4: TODO - Send email via Nodemailer
+        // This will iterate through newsPerUser and send personalized emails
+    }
+)
