@@ -43,11 +43,10 @@ export const getWatchlistSymbolsByEmail = async (email: string): Promise<string[
 
 // Add stock to watchlist
 export const addToWatchlist = async (symbol: string, company: string) => {
+    const session = await auth.api.getSession({headers: await headers()});
+    if (!session?.user) redirect(`/log-in`);
+
     try {
-        const session = await auth.api.getSession({headers: await headers()});
-
-        if (!session?.user) redirect(`/log-in`);
-
         const existingStock = await Watchlist.findOne({
             userId: session.user.id,
             symbol: symbol.toUpperCase(),
