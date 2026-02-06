@@ -96,7 +96,7 @@ const AlertForm = () => {
                     placeholder="eg: 140"
                     register={register}
                     error={errors.threshold}
-                    validation={{ required: 'Alert name is required', minLength: 2 }}
+                    validation={{required: 'Threshold is required', valueAsNumber: true, min: { value: 0.01, message: 'Threshold must be greater than 0' }, }}
                 />
 
                 <SelectField
