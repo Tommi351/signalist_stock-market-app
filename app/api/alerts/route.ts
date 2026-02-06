@@ -60,7 +60,7 @@ export async function POST(req: NextRequest) {
         const existingAlert = await Alert.findOne({
             userId: session.user.id,
             identifier: symbol.toUpperCase().trim(),
-            condition: alertType,
+            condition: condition,
             threshold: threshold,
         });
 
