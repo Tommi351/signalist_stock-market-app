@@ -37,8 +37,8 @@ export async function PUT(req: NextRequest, {params}: {params: Promise<{id: stri
             symbol: updatedAlert.identifier,
             company: updatedAlert.name,
             alertName: updatedAlert.name,
-            alertType: updatedAlert.condition === "Greater than" ? "upper" : "lower",
-            condition: updatedAlert.condition === "Greater than" ? "Greater than" : "Less than",
+            alertType: updatedAlert.condition === "Greater than" ? "upper" : updatedAlert.condition === "Less than" ? "lower" : "equal",
+            condition: updatedAlert.condition,
             frequency: updatedAlert.frequency as AlertFrequency,
             threshold: updatedAlert.threshold,
         };

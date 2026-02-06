@@ -256,7 +256,7 @@ declare global {
         symbol: string;
         company: string;
         alertName: string;
-        alertType: 'upper' | 'lower';
+        alertType: 'upper' | 'lower' | 'equal';
         condition: AlertCondition;
         frequency: AlertFrequency;
         threshold: number;

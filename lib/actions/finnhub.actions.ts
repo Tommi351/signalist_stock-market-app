@@ -121,7 +121,7 @@ export const searchStocks = cache(
             const session = await auth.api.getSession({
                 headers: await headers(),
             });
-            if (!session?.user) redirect('/sign-in');
+            if (!session?.user) redirect('/log-in');
 
             const userWatchlistSymbols = await getWatchlistSymbolsByEmail(
                 session.user.email
@@ -294,7 +294,7 @@ export const getWatchlistWithData = async () => {
         const session = await auth.api.getSession({
             headers: await headers(),
         });
-        if (!session?.user) redirect('/sign-in');
+        if (!session?.user) redirect('/log-in');
 
         const watchlist = await Watchlist.find({ userId: session.user.id }).sort({ addedAt: -1 }).lean();
 

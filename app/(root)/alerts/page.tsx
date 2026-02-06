@@ -9,11 +9,12 @@ import {
     CONDITION_OPTIONS, FREQUENCY_OPTIONS,
 } from "@/lib/constants";
 import {useAlerts} from "@/hooks/useAlerts";
-import {redirect} from "next/navigation";
+import {useRouter} from "next/navigation";
 import {toast} from "sonner";
 
 
 const AlertForm = () => {
+    const router = useRouter();
     const {createAlert} = useAlerts();
     const {
         register,
@@ -33,11 +34,10 @@ const AlertForm = () => {
 
 
     const onSubmit = async (payload: AlertsData) => {
-        console.log("Submitting data...");
         try {
             const result = await createAlert(payload);
             if(result.success) {
-                console.log("Success");
+                router.push('/watchlist');
             }
         } catch (e) {
             console.error(e);
@@ -45,8 +45,6 @@ const AlertForm = () => {
                 description: e instanceof Error ? e.message : 'Failed to create an alert.'
             })
         }
-
-        redirect('/watchlist');
     }
 
     return (

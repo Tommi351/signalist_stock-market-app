@@ -9,10 +9,15 @@ export const getUserForAlertsEmail = async (userId: string) => {
     const db = mongoose.connection.db;
     if (!db) throw new Error("MongoDB connection failed");
 
-    const user = await db.collection('user').findOne(
-        { $or: [{ id: userId }, { _id: new ObjectId(userId) }] },
-        {projection: {_id: 1, id: 1, email: 1, name: 1}}
-    );
+       const idFilter: Record<string, unknown>[] = [{ id: userId }];
+           if (ObjectId.isValid(userId)) {
+                   idFilter.push({ _id: new ObjectId(userId) });
+              }
+
+       const user = await db.collection('user').findOne(
+           { $or: idFilter },
+           {projection: {_id: 1, id: 1, email: 1, name: 1}},
+       );
 
     if (!user) return null;
 

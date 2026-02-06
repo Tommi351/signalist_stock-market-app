@@ -27,7 +27,7 @@ const WatchList = async () => {
 
     return (
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 w-full min-h-screen">
-        <section className="lg: col-span-3">
+        <section className="lg:col-span-3">
             <div className="flex flex-col gap-6">
                 <div className="flex items-center justify-between">
                     <h2 className="watchlist-title">WatchList</h2>

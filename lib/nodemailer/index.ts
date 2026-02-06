@@ -57,9 +57,11 @@ export const sendAlertEmail = async (
             await sendLowerAlertEmail({email, symbol, timestamp, company, currentPrice, targetPrice})
             return;
         case "equal":
-            throw new Error("Alert threshold is equal to current price");
+            // TODO: handle "equal" alerts if/when a template is added
+            return;
         default:
-            throw new Error("No email template found for alert direction");
+            // Condition not met — no email needed
+            return;
     }
 };
 
