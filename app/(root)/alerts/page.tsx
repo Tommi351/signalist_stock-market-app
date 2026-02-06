@@ -88,7 +88,7 @@ const AlertForm = () => {
                     placeholder="Greater Than (>)"
                     options={CONDITION_OPTIONS}
                     control={control}
-                    error={errors.alertType}
+                    error={errors.condition}
                     required
                 />
 
