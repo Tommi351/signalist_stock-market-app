@@ -144,9 +144,11 @@ export const sendUserAlertEmail = inngest.createFunction(
         // Step #1: Fetch Alert as source of truth
         const alertId = event.data.alertId;
 
-        const alertDoc = await Alert.findById(alertId).lean<AlertItem>();
-
-        if (!alertDoc) throw new Error(`Alert with id ${alertId} not found`);
+        const alertDoc = await step.run('fetch-alert', async () => {
+            const doc = await Alert.findById(alertId).lean<AlertItem>();
+            if (!doc) throw new Error(`Alert with id ${alertId} not found`);
+            return doc;
+        });
 
         // Step #2: Get user for alert email delivery
         const user = await step.run('get-user-for-alert-email', () => getUserForAlertsEmail(alertDoc.userId));
