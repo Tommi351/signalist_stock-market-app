@@ -1,10 +1,14 @@
 import {inngest} from "@/lib/inngest/client";
-import {NEWS_SUMMARY_EMAIL_PROMPT, PERSONALIZED_WELCOME_EMAIL_PROMPT} from "@/lib/inngest/prompts";
-import {sendNewsSummaryEmail, sendWelcomeEmail} from "@/lib/nodemailer";
+import {NEWS_SUMMARY_EMAIL_PROMPT, PERSONALIZED_WELCOME_EMAIL_PROMPT, UPPER_ALERT_SUMMARY_EMAIL_PROMPT, LOWER_ALERT_SUMMARY_EMAIL_PROMPT} from "@/lib/inngest/prompts";
+import {sendNewsSummaryEmail, sendWelcomeEmail, sendAlertEmail} from "@/lib/nodemailer";
 import {getAllUsersForNewsEmail} from "@/lib/actions/user.actions";
 import {getWatchlistSymbolsByEmail} from "@/lib/actions/watchlist.actions";
-import {getNews} from "@/lib/actions/finnhub.actions";
-import { getFormattedTodayDate} from "@/lib/utils";
+import {getNews, getStocksDetails} from "@/lib/actions/finnhub.actions";
+import {getUserForAlertsEmail} from "@/lib/actions/alert.actions";
+import {Alert} from "@/database/models/alert.model";
+import type { AlertItem } from "@/database/models/alert.model";
+
+import { getFormattedTodayDate, evaluateAlertDirection} from "@/lib/utils";
 
 export const sendSignUpEmail = inngest.createFunction(
     { id: 'sign-up-email' },
@@ -133,15 +137,44 @@ export const sendDailyNewsSummary = inngest.createFunction(
     }
 );
 
-export const sendUserAlert = inngest.createFunction(
+export const sendUserAlertEmail = inngest.createFunction(
     { id: 'user-alert' },
     { event: 'app/sent.alert'},
     async ({ event, step }) => {
-        // Step #1: Get all users for news delivery
-        // Step #2: Fetch personalized news for each user
-        // Step #3: TODO - Summarize news using AI for each user
-        // This will use step.ai.infer() similar to sendSignUpEmail
-        // Step #4: TODO - Send email via Nodemailer
-        // This will iterate through newsPerUser and send personalized emails
-    }
-)
+        // Step #1: Fetch Alert as source of truth
+        const alertId = event.data.alertId;
+
+        const alertDoc = await Alert.findById(alertId).lean<AlertItem>();
+
+        if (!alertDoc) throw new Error(`Alert with id ${alertId} not found`);
+
+        // Step #2: Get user for alert email delivery
+        const user = await step.run('get-user-for-alert-email', () => getUserForAlertsEmail(alertDoc.userId));
+        if (!user) throw new Error(`User not found`);
+        // Step #3: TODO - Fetch current stock price
+        // Step #3: Fetch current stock price
+        const symbol = alertDoc.identifier;
+        const stockDetails = await step.run('get-stock-details', () => getStocksDetails(symbol));
+        const currentPrice = stockDetails.currentPrice;
+
+        // Step #4: TODO - Evaluate Alert's condition
+        const direction = evaluateAlertDirection(alertDoc, currentPrice);
+
+        if (!direction) {
+            console.log(`Alert for ${alertDoc.identifier} not triggered.`);
+            return; // 🚫 stop early, no email
+        }
+
+        // Step #5: Send email based on condition(upper or lower) via Nodemailer
+            await step.run('send-alert-email', async () => {
+                const email = user.email;
+                const symbol = alertDoc.identifier;
+                const company = alertDoc.name;
+                const timestamp = alertDoc.updatedAt.toISOString();
+
+                return await sendAlertEmail({email, symbol, timestamp, company, currentPrice, targetPrice: alertDoc.threshold, alertDoc});
+            });
+
+            return {success: true, message: 'Alert email sent successfully'};
+        }
+);

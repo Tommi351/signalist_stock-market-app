@@ -1,5 +1,7 @@
 import nodemailer from 'nodemailer'
 import {NEWS_SUMMARY_EMAIL_TEMPLATE, WELCOME_EMAIL_TEMPLATE, STOCK_ALERT_UPPER_EMAIL_TEMPLATE, STOCK_ALERT_LOWER_EMAIL_TEMPLATE} from "@/lib/nodemailer/templates";
+import {evaluateAlertDirection} from "@/lib/utils";
+import type {AlertItem} from "@/database/models/alert.model";
 
 export const transporter = nodemailer.createTransport({
     service: 'gmail',
@@ -43,21 +45,39 @@ export const sendNewsSummaryEmail = async (
     await transporter.sendMail(mailOptions);
 };
 
-export const sendUpperAlertEmail = async (
-    {email, symbol, timestamp, company, currentPrice, targetPrice}: {email: string; symbol: string; timestamp: string; company: string; currentPrice: string; targetPrice: string}
+export const sendAlertEmail = async (
+    {email, symbol, timestamp, company, currentPrice, targetPrice, alertDoc}: {email: string; symbol: string; timestamp: string; company: string; currentPrice: number; targetPrice: number; alertDoc: AlertItem;}
 ): Promise<void> => {
-    const htmlTemplate = STOCK_ALERT_UPPER_EMAIL_TEMPLATE
+    const direction = evaluateAlertDirection(alertDoc, currentPrice)
+    switch (direction) {
+        case "upper":
+            await sendUpperAlertEmail({email, symbol, timestamp, company, currentPrice, targetPrice});
+            return;
+        case "lower":
+            await sendLowerAlertEmail({email, symbol, timestamp, company, currentPrice, targetPrice})
+            return;
+        case "equal":
+            throw new Error("Alert threshold is equal to current price");
+        default:
+            throw new Error("No email template found for alert direction");
+    }
+};
+
+export const sendLowerAlertEmail = async (
+    {email, symbol, timestamp, company, currentPrice, targetPrice}: {email: string; symbol: string; timestamp: string; company: string; currentPrice: number; targetPrice: number}
+) => {
+    const htmlTemplate = STOCK_ALERT_LOWER_EMAIL_TEMPLATE
         .replace('{{symbol}}', symbol)
         .replace('{{timestamp}}', timestamp)
         .replace('{{company}}', company)
-        .replace('{{currentPrice}}', currentPrice)
-        .replace('{{targetPrice}}', targetPrice);
+        .replace('{{currentPrice}}', currentPrice.toString())
+        .replace('{{targetPrice}}', targetPrice.toString());
 
 
     const mailOptions = {
         from: `"Signalist" <signalist@jsmastery.pro>`,
         to: email,
-        subject: `${symbol}'s price is above your target price`,
+        subject: `${symbol}'s is below your target price`,
         text: `Signalist Alerts are remarkable, huh?`,
         html: htmlTemplate,
     };
@@ -65,21 +85,21 @@ export const sendUpperAlertEmail = async (
     await transporter.sendMail(mailOptions);
 };
 
-export const sendLowerAlertEmail = async (
-    {email, symbol, timestamp, company, currentPrice, targetPrice}: {email: string; symbol: string; timestamp: string; company: string; currentPrice: string; targetPrice: string}
-): Promise<void> => {
-    const htmlTemplate = STOCK_ALERT_LOWER_EMAIL_TEMPLATE
+export const sendUpperAlertEmail = async (
+    {email, symbol, timestamp, company, currentPrice, targetPrice}: {email: string; symbol: string; timestamp: string; company: string; currentPrice: number; targetPrice: number}
+) => {
+    const htmlTemplate = STOCK_ALERT_UPPER_EMAIL_TEMPLATE
         .replace('{{symbol}}', symbol)
         .replace('{{timestamp}}', timestamp)
         .replace('{{company}}', company)
-        .replace('{{currentPrice}}', currentPrice)
-        .replace('{{targetPrice}}', targetPrice);
+        .replace('{{currentPrice}}', currentPrice.toString())
+        .replace('{{targetPrice}}', targetPrice.toString());
 
 
     const mailOptions = {
         from: `"Signalist" <signalist@jsmastery.pro>`,
         to: email,
-        subject: `${symbol}'s is below your target price`,
+        subject: `${symbol}'s is above your target price`,
         text: `Signalist Alerts are remarkable, huh?`,
         html: htmlTemplate,
     };

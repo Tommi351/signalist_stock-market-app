@@ -1,5 +1,6 @@
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
+import {AlertItem} from "@/database/models/alert.model";
 
 export function cn(...inputs: ClassValue[]) {
     return twMerge(clsx(inputs));
@@ -125,7 +126,7 @@ export const formatDateToday = new Date().toLocaleDateString('en-US', {
 });
 
 
-export const getAlertText = (alert: Alert) => {
+export const getAlertText = (alert: AlertDTO) => {
     const condition = alert.alertType === 'upper' ? '>' : '<';
     return `Price ${condition} ${formatPrice(alert.threshold)}`;
 };
@@ -137,3 +138,16 @@ export const getFormattedTodayDate = () => new Date().toLocaleDateString('en-US'
     day: 'numeric',
     timeZone: 'UTC',
 });
+
+export function evaluateAlertDirection(alert: AlertItem, currentPrice: number): "upper" | "lower" | "equal" | null {
+    switch (alert.condition) {
+        case "Greater than":
+            return currentPrice > alert.threshold ? "upper" : null;
+        case "Less than":
+            return currentPrice < alert.threshold ? "lower" : null;
+        case "Equal to":
+            return currentPrice === alert.threshold ? "equal" : null;
+        default:
+            throw new Error("Alert condition is invalid or corrupted in DB.");
+    }
+}

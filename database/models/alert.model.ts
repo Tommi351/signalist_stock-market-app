@@ -5,10 +5,11 @@ export interface AlertItem extends Document {
       name: string;
       identifier: string;
       type: string;
-      condition: string;
-      threshold: Number;
+      condition: "Greater than" | "Less than" | "Equal to";
+      threshold: number;
       frequency: string;
-      addedAt: Date;
+      createdAt: Date;
+      updatedAt: Date;
 }
 
 const AlertSchema = new Schema<AlertItem>({
@@ -34,6 +35,7 @@ const AlertSchema = new Schema<AlertItem>({
    condition: {
       type: String,
       required: true,
+       enum: ["Greater than", "Less than", "Equal to"],
    },
    threshold: {
       type: Number,
@@ -41,14 +43,11 @@ const AlertSchema = new Schema<AlertItem>({
    },
    frequency: {
      type: String,
-     required: true, 
+     required: true,
+       enum: ["Once per minute", "Once per hour", "Once per day"],
    },
-   addedAt: {
-      type: Date,
-      default: Date.now,
-      index: true,
-   },
-});
+},
+    {timestamps: true}); // Automatically adds createdAt and updatedAt
 
 AlertSchema.index({userId: 1, identifier: 1, condition: 1, threshold: 1}, {unique: true});
 

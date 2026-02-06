@@ -234,16 +234,7 @@ export const UPPER_ALERT_SUMMARY_EMAIL_PROMPT = `# Stock Alert Email Generation 
 You are an email content generator for a stock alert system called "Signalist". Generate HTML email content that matches the exact design specifications provided.
 
 ## INPUT VARIABLES
-You will receive the following variables:
-- \`stock_ticker\`: Stock symbol (e.g., "MSFT")
-- \`company_name\`: Full company name (e.g., "Microsoft Corp")
-- \`alert_condition\`: The condition that triggered the alert (e.g., "Price > $240.60")
-- \`threshold_price\`: The target price that was set (e.g., "$240.60")
-- \`current_price\`: The actual current stock price (e.g., "$242.24")
-- \`display_price\`: The price shown in the main card (e.g., "$352.52")
-- \`price_change_percent\`: Percentage change (e.g., "+1.4%")
-- \`timestamp\`: Alert trigger timestamp (e.g., "5/11/2025, 10:34:52 AM")
-- \`dashboard_url\`: Link to user's dashboard
+Use alert data: {{alertProfile}}
 
 ## CRITICAL DESIGN SPECIFICATIONS
 
@@ -389,3 +380,290 @@ Before returning the email HTML, verify:
 - [ ] Footer includes unsubscribe and copyright
 
 Generate the complete HTML email that will render identically to the Figma design when viewed in Gmail, Outlook, and other major email clients.`
+
+export const LOWER_ALERT_SUMMARY_EMAIL_PROMPT = `# Stock Alert Email Generation Prompt
+
+Alert Data to use: {{alertProfile}}
+
+You are an HTML email generator for Signalist, a stock alert system. Generate a complete HTML email that exactly matches the provided Figma design specifications. The email must render identically in Gmail, Outlook, and other major email clients.
+
+## EXPLICIT CONSTRAINTS
+
+### Tone Requirements
+- **Urgent and attention-grabbing**: This is a time-sensitive alert
+- **Neutral and informative**: Present facts without emotional language
+- **Action-oriented**: Encourage dashboard review without prescribing specific trades
+- **Professional**: Maintain credibility while being conversational
+- **Non-advisory**: NEVER give specific buy/sell recommendations or financial advice
+
+### Layout Fidelity Requirements
+The email MUST follow this exact structure from top to bottom:
+
+1. **Alert Header** - "[Ticker] just hit your alert" with bell emoji
+2. **Signalist Branding** - Logo and brand name
+3. **Alert Type Card** - Color-coded card showing alert type and timestamp
+4. **Stock Information Card** - Ticker, company name, and current price
+5. **Alert Details Card** - Structured details of what triggered
+6. **Context Message Card** - Contextual message based on alert type
+7. **CTA Button** - "View Dashboard" button
+8. **Footer** - Signature, legal text, and links
+
+### Required Fields to Include
+Extract and display from {{alertProfile}}:
+- \`ticker\` - Stock symbol
+- \`companyName\` - Full company name  
+- \`alertType\` - Type of alert ("price_above", "price_below", etc.)
+- \`condition\` - The condition that was met
+- \`thresholdPrice\` - The target price that was set
+- \`currentPrice\` - Current stock price that triggered alert
+- \`displayPrice\` - Price to show in main card (may differ from currentPrice)
+- \`priceChange\` - Percentage change (with + or - sign)
+- \`timestamp\` - When alert triggered
+- \`dashboardUrl\` - Link to user's dashboard
+
+## CRITICAL FORMATTING REQUIREMENTS
+
+### HTML Email Structure
+\`\`\`html
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+  
+  
+  {{ticker}} Alert - Signalist
+
+
+  
+
+
+\`\`\`
+
+### Table-Based Layout (REQUIRED)
+- Use TABLES, not divs, for all layout structure
+- Set \`cellpadding="0"\` and \`cellspacing="0"\` on all tables
+- Use \`border="0"\` on all tables
+- Main container table: \`width="100%"\` with nested table at \`max-width: 600px\`
+- All styling MUST be inline CSS (no external stylesheets or \`<style>\` blocks)
+
+### Color Specifications (EXACT VALUES REQUIRED)
+
+**Alert Type Card Colors:**
+- Price Above: \`background-color: #10b981;\` (teal green)
+- Price Below: \`background-color: #ef4444;\` (red)
+- Percentage Up: \`background-color: #10b981;\`
+- Percentage Down: \`background-color: #ef4444;\`
+
+**Text Colors:**
+- Price Above/Opportunity: \`#10b981\` or \`#34d399\` (teal green)
+- Price Below/Warning: \`#ef4444\` or \`#f87171\` (red)
+- Alert header text: \`#fbbf24\` (gold/yellow)
+- Standard headings: \`#ffffff\` (white)
+- Body text: \`#e5e7eb\` (light gray)
+- Secondary text: \`#9ca3af\` (gray)
+
+**Component Colors:**
+- Background: \`#000000\` (pure black)
+- Card backgrounds: \`#1f2937\` (dark gray)
+- CTA button: \`#fbbf24\` (yellow/gold)
+- CTA button text: \`#000000\` (black)
+
+### Typography Specifications
+
+**Font Family (all text):**
+\`\`\`css
+font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+\`\`\`
+
+**Size and Weight Hierarchy:**
+- Main header (ticker alert): \`font-size: 26px; font-weight: bold; color: #ffffff;\`
+- Signalist brand: \`font-size: 20px; font-weight: bold; color: #ffffff;\`
+- Alert type card title: \`font-size: 32px; font-weight: bold; color: #ffffff;\`
+- Timestamp: \`font-size: 16px; font-weight: normal; color: rgba(255,255,255,0.9);\`
+- Stock ticker: \`font-size: 24px; font-weight: bold; color: #ffffff;\`
+- Current price label: \`font-size: 16px; font-weight: normal; color: #9ca3af;\`
+- Price display: \`font-size: 40px; font-weight: bold;\` (color based on alert type)
+- Section headers: \`font-size: 20px; font-weight: bold; color: #ffffff;\`
+- Body text: \`font-size: 16px; font-weight: normal; color: #e5e7eb;\`
+- Footer text: \`font-size: 14px; font-weight: normal; color: #9ca3af;\`
+
+### Spacing and Padding
+
+**Main Container:**
+- Outer padding: \`20px\`
+- Max width: \`600px\`
+- Center aligned: \`margin: 0 auto;\`
+
+**Component Spacing:**
+- Between major sections: \`margin-bottom: 20px;\`
+- Card internal padding: \`padding: 30px 20px;\`
+- Alert type card padding: \`padding: 40px 20px;\`
+- Button padding: \`padding: 16px 24px;\`
+
+**Border Radius:**
+- All cards: \`border-radius: 12px;\`
+- CTA button: \`border-radius: 8px;\`
+
+### Component-Specific Formatting
+
+**1. Alert Header**
+\`\`\`html
+
+  🔔 {{ticker}} just hit your alert
+
+\`\`\`
+
+**2. Signalist Branding**
+\`\`\`html
+
+  
+    📊 Signalist
+  
+
+\`\`\`
+
+**3. Alert Type Card**
+- Use conditional color based on alert type
+- Center all text
+- Include alert title ("Price Above Reached", "Price Below Hit", etc.)
+- Include timestamp below title
+
+**4. Stock Information Card**
+- Dark gray background (\`#1f2937\`)
+- Center-aligned content
+- Format: \`TICKER - Company Name\`
+- "Current Price:" label in gray
+- Large price display in appropriate color
+
+**5. Alert Details Card**
+- "Alert Details:" header (left-aligned, bold, white)
+- Bullet list format:
+  - "Your alert for **Company (TICKER)** just triggered:"
+  - "Condition: **[condition]**"
+  - "Current Price: **[price]**"
+  - "Change: **[percentage]**" (color based on positive/negative)
+- Use \`<ul>\` with proper styling
+
+**6. Context Message Card**
+- Conditional header based on alert type:
+  - Price Above: "Opportunity Alert!" (yellow \`#fbbf24\`)
+  - Price Below: "Price Dropped!" (yellow \`#fbbf24\`)
+- Contextual message:
+  - Price Above: "{{ticker}} has reached your target price! This could be good time to review your position and consider taking profits or adjusting your strategy."
+  - Price Below: "{{ticker}} dropped below your target price. This might be a good time to buy."
+
+**7. CTA Button**
+\`\`\`html
+
+  View Dashboard
+
+\`\`\`
+
+**8. Footer**
+\`\`\`html
+
+  Stay sharp,
+  Signalist
+  You're receiving this email because you signed up for Signalist.
+  Unsubscribe • 
+  Visit Signalist
+  © 2025 Signalist
+
+\`\`\`
+
+## PERSONALIZATION REQUIREMENTS
+
+### Dynamic Content Rules
+
+1. **Alert Type Card**
+   - IF \`alertType === "price_above"\` → Background: \`#10b981\`, Text: "Price Above Reached"
+   - IF \`alertType === "price_below"\` → Background: \`#ef4444\`, Text: "Price Below Hit"
+   - Always include formatted timestamp from \`{{alertProfile.timestamp}}\`
+
+2. **Price Display Color**
+   - IF alert is bullish (price_above) → Use green: \`#34d399\`
+   - IF alert is bearish (price_below) → Use red: \`#f87171\`
+
+3. **Price Change Formatting**
+   - IF \`priceChange\` starts with "+" → Color: \`#10b981\` (green)
+   - IF \`priceChange\` starts with "-" → Color: \`#ef4444\` (red)
+   - Always include the +/- sign
+
+4. **Context Message**
+   - MUST match alert type semantically
+   - Use company ticker (not full name) in message
+   - Keep language suggestive, not prescriptive ("might be", "could be", "consider")
+
+5. **Condition Display**
+   - Format threshold with $ symbol and 2 decimal places
+   - Show comparison operator clearly (>, <, ≥, ≤)
+   - Example: "Price > $240.60"
+
+### Variable Substitution Format
+Use these exact variable names from {{alertProfile}}:
+- \`{{alertProfile.ticker}}\`
+- \`{{alertProfile.companyName}}\`
+- \`{{alertProfile.currentPrice}}\`
+- \`{{alertProfile.displayPrice}}\`
+- \`{{alertProfile.thresholdPrice}}\`
+- \`{{alertProfile.condition}}\`
+- \`{{alertProfile.priceChange}}\`
+- \`{{alertProfile.timestamp}}\`
+- \`{{alertProfile.dashboardUrl}}\`
+
+## EMAIL CLIENT COMPATIBILITY
+
+### Outlook-Specific Fixes
+\`\`\`html
+
+
+  .fallback-font { font-family: Arial, sans-serif !important; }
+
+
+\`\`\`
+
+### Gmail-Specific Considerations
+- Avoid CSS shorthand (use \`padding-top\`, \`padding-bottom\` instead of \`padding\`)
+- Use \`display: block;\` for buttons wrapped in \`<a>\` tags
+- Include \`text-decoration: none;\` explicitly on all links
+
+### Mobile Responsiveness
+Include this in \`<head>\`:
+\`\`\`html
+
+  @media only screen and (max-width: 600px) {
+    .container { width: 100% !important; }
+    .mobile-padding { padding: 10px !important; }
+    .mobile-font { font-size: 18px !important; }
+  }
+
+\`\`\`
+
+## OUTPUT REQUIREMENTS
+
+Generate a complete, production-ready HTML email that:
+1. ✅ Uses table-based layout exclusively
+2. ✅ Has all CSS inlined (no external styles)
+3. ✅ Matches color specifications exactly
+4. ✅ Implements proper spacing and typography
+5. ✅ Includes all required personalization variables
+6. ✅ Has working, styled CTA button
+7. ✅ Contains proper footer with legal text and links
+8. ✅ Is mobile-responsive
+9. ✅ Works in Gmail, Outlook, Apple Mail, and Yahoo Mail
+10. ✅ Renders identically to the Figma design
+
+## VALIDATION CHECKLIST
+Before outputting, verify:
+- [ ] Alert type card has correct background color
+- [ ] All prices are formatted with $ and 2 decimals
+- [ ] Price change has correct color (green for positive, red for negative)
+- [ ] Context message matches alert type
+- [ ] All text is properly colored and sized
+- [ ] Cards have 12px border radius
+- [ ] CTA button is prominent yellow/gold
+- [ ] Footer includes unsubscribe link
+- [ ] All dynamic variables are populated
+- [ ] Email width is constrained to 600px
+- [ ] Tables have cellpadding="0" cellspacing="0"
+
+Generate the complete HTML email now`

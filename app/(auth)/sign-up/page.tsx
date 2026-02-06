@@ -12,6 +12,7 @@ import {useRouter} from "next/navigation";
 import {toast} from "sonner";
 
 const SignUp = () => {
+    const router = useRouter()
     const {
         register,
         handleSubmit,
@@ -30,16 +31,10 @@ const SignUp = () => {
         mode: 'onBlur'
     }, );
 
-    const router = useRouter();
-
     const onSubmit = async (data: SignUpFormData) => {
-        console.log("Submitting data...");
         try {
             const result = await signUpWithEmail(data);
-            if(result.success) {
-                router.push('/');
-                console.log("SUBMITTED");
-            }
+            if(result.success) router.push('/');
         } catch (e) {
             console.error(e);
             toast.error('Sign up failed', {
@@ -68,7 +63,7 @@ const SignUp = () => {
                     placeholder="contact@jsmastery.com"
                     register={register}
                     error={errors.email}
-                    validation={{ required: 'Email name is required', pattern: /^[^\s@]+@[^\s@]+\.[^\s@]+$/, message: 'Email address is required' }}
+                    validation={{ required: 'Email name is required', pattern: /^\w+@\w+\.\w+$/, message: 'Email address is required' }}
                 />
 
                 <InputField
@@ -123,7 +118,7 @@ const SignUp = () => {
                     {isSubmitting ? 'Creating Account' : 'Start Your Investing Journey'}
                 </Button>
 
-                <FooterLink text="Already have an account?" linkText="Log In" href="/log-in" />
+                <FooterLink text="Already have an account?" linkText="Sign in" href="/log-in" />
             </form>
         </>
     )

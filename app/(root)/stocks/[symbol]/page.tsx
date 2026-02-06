@@ -7,7 +7,7 @@ import {
     COMPANY_PROFILE_WIDGET_CONFIG,
     COMPANY_FINANCIALS_WIDGET_CONFIG,
 } from "@/lib/constants";
-import WatchlistButton from "@/components/WatchListButton";
+import WatchlistButton from "@/components/watchlist/WatchListButton";
 import {getStocksDetails, getUserWatchList} from "@/lib/actions/finnhub.actions";
 import {WatchlistItem} from "@/database/models/watchlist.model";
 import { notFound } from "next/navigation";

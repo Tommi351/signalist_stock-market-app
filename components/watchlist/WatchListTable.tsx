@@ -9,11 +9,10 @@ import {
     TableRow,
 } from '@/components/ui/table';
 import { WATCHLIST_TABLE_HEADER } from '@/lib/constants';
-import { Button } from './ui/button';
-import WatchlistButton  from './WatchListButton';
+import { Button } from '../ui/button';
+import  WatchlistButton  from "@/components/watchlist/WatchListButton";
 import { useRouter } from 'next/navigation';
 import { cn, getChangeColorClass } from '@/lib/utils';
-import React from "react";
 
 export function WatchlistTable({ watchlist }: WatchlistTableProps) {
     const router = useRouter();
@@ -59,7 +58,7 @@ export function WatchlistTable({ watchlist }: WatchlistTableProps) {
                                 {item.peRatio || '—'}
                             </TableCell>
                             <TableCell>
-                                <Button className="add-alert">Add Alert</Button>
+                                <Button className='add-alert'>Add Alert</Button>
                             </TableCell>
                             <TableCell>
                                 <WatchlistButton

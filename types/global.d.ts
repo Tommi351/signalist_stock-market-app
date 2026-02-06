@@ -148,9 +148,41 @@ declare global {
         peRatio?: string;
     };
 
+    type AlertFrequency =
+        | "Once per minute"
+        | "Once per hour"
+        | "Once per day";
+
+
+    type AlertCondition =
+        | "Greater than"
+        | "Less than"
+        | "Equal to";
+
     type AlertsListProps = {
-        alertData: Alert[] | undefined;
+        alerts: AlertDTO[];
+        updateAlert: (id: string, payload: UpdateAlertPayload) => Promise<void>;
+        deleteAlert: (id: string) => Promise<void>;
     };
+
+    type AlertCardProps = AlertDTO & {updateAlert: (id: string, payload: UpdateAlertPayload) => Promise<void>;
+        deleteAlert: (id: string) => Promise<void>;};
+
+
+    type UpdateAlertPayload = {
+        condition?: AlertCondition;
+        threshold?: number;
+        frequency?: AlertFrequency;
+    };
+
+    type CreateAlertPayload = {
+        symbol: string;
+        company: string;
+        alertName?: string;
+        alertType: "upper" | "lower";
+        threshold: number;
+        frequency: AlertFrequency;
+    }
 
     type MarketNewsArticle = {
         id: number;
@@ -177,13 +209,20 @@ declare global {
         className?: string;
     };
 
-    type AlertData = {
+    type AlertsData = {
         symbol: string;
         company: string;
         alertName: string;
         alertType: 'upper' | 'lower';
-        threshold: string;
+        condition: AlertCondition;
+        threshold: number;
+        frequency: AlertFrequency;
     };
+
+    type ConditionFunction = {
+        alert?: AlertItem;
+        currentPrice?: number;
+    }
 
     type AlertModalProps = {
         alertId?: string;
@@ -205,15 +244,22 @@ declare global {
         related?: string;
     };
 
-    type Alert = {
+    type UpdatedAlertDTO = {
+        id: string;
+        condition: AlertCondition;
+        frequency: AlertFrequency;
+        threshold: number;
+    }
+
+    type AlertDTO = {
         id: string;
         symbol: string;
         company: string;
         alertName: string;
-        currentPrice: number;
         alertType: 'upper' | 'lower';
+        condition: AlertCondition;
+        frequency: AlertFrequency;
         threshold: number;
-        changePercent?: number;
     };
 }
 
