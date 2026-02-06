@@ -160,12 +160,12 @@ export const sendUserAlertEmail = inngest.createFunction(
         // Step #4: TODO - Evaluate Alert's condition
         const direction = evaluateAlertDirection(alertDoc, currentPrice);
 
-        if (!direction) {
+        if (!direction || direction === "equal") {
             console.log(`Alert for ${alertDoc.identifier} not triggered.`);
             return; // 🚫 stop early, no email
         }
 
-        // Step #5: Send email based on condition(upper or lower) via Nodemailer
+        // Step `#5`: Send email based on condition(upper or lower) via Nodemailer
             await step.run('send-alert-email', async () => {
                 const email = user.email;
                 const symbol = alertDoc.identifier;
