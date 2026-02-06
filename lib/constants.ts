@@ -33,8 +33,15 @@ export const ALERT_TYPE_OPTIONS = [
 ];
 
 export const CONDITION_OPTIONS = [
-    { value: 'greater', label: 'Greater than (>)' },
-    { value: 'less', label: 'Less than (<)' },
+    { value: 'Greater than', label: 'Greater than (>)' },
+    { value: 'Less than', label: 'Less than (<)' },
+    { value: 'Equal to', label: 'Equal to (=)' },
+];
+
+export const FREQUENCY_OPTIONS = [
+    { value: 'Once per minute', label: 'Once per minute' },
+    { value: 'Once per hour', label: 'Once per hour' },
+    { value: 'Once per day', label: 'Once per day' },
 ];
 
 // TradingView Charts

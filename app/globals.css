@@ -356,7 +356,7 @@
         @apply p-4 rounded-lg bg-gray-700 border border-gray-600;
     }
     .alert-name {
-        @apply mb-2 text-lg text-yellow-500 font-semibold;
+        @apply mb-2 text-lg text-yellow-500 font-semibold bg-yellow-300/20;
     }
     .alert-details {
         @apply flex border-b pb-3 items-center justify-between gap-3 mb-2;

@@ -27,6 +27,7 @@ const WatchlistSchema = new Schema<WatchlistItem>({
     addedAt: {
         type: Date,
         default: Date.now,
+        index: true,
     },
 });
 

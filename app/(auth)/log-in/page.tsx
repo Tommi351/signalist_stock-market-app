@@ -4,8 +4,9 @@ import { useForm } from 'react-hook-form';
 import { Button } from '@/components/ui/button';
 import InputField from '@/components/forms/InputField';
 import FooterLink from '@/components/forms/FooterLink';
+import {logInWithEmail} from "@/lib/actions/auth.actions";
 import {toast} from "sonner";
-import {logInWithEmail } from "@/lib/actions/auth.actions";
+import {signInEmail} from "better-auth/api";
 import {useRouter} from "next/navigation";
 
 const Login = () => {
@@ -24,17 +25,8 @@ const Login = () => {
 
     const onSubmit = async (data: SignInFormData) => {
         try {
-            console.log('Attempting login with:', data);
             const result = await logInWithEmail(data);
-            
-            if (result.success) {
-                toast.success('Sign in successful!');
-                router.push('/');
-            } else {
-                toast.error('Sign in failed', {
-                    description: result.error || 'Failed to sign in.'
-                });
-            }
+            if(result.success) router.push('/');
         } catch (e) {
             console.error(e);
             toast.error('Sign in failed', {
