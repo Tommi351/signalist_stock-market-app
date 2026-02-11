@@ -100,9 +100,9 @@ export async function POST(req: NextRequest) {
 
         revalidatePath("/watchlist");
 
-        return NextResponse.json({message: 'Alert created successfully', alert: alertDTOs}, {status: 201});
+        return NextResponse.json({success: true, message: 'Alert created successfully', alert: alertDTOs}, {status: 201});
     } catch (error) {
         console.error(error);
-        return NextResponse.json({message: 'Error creating alerts', error: error instanceof Error ? error.message : "Unknown"}, {status: 500});
+        return NextResponse.json({success: false, message: 'Error creating alerts', error: error instanceof Error ? error.message : "Unknown"}, {status: 500});
     }
 }

@@ -184,6 +184,15 @@ declare global {
         frequency: AlertFrequency;
     }
 
+    type AlertDirection = {
+        condition: AlertCondition;
+        threshold: number;
+    }
+
+    type AlertText = {
+        alertType: 'upper' | 'lower' | 'equal',
+        threshold: number;
+    }
     type MarketNewsArticle = {
         id: number;
         headline: string;

@@ -46,9 +46,9 @@ export const sendNewsSummaryEmail = async (
 };
 
 export const sendAlertEmail = async (
-    {email, symbol, timestamp, company, currentPrice, targetPrice, alertDoc}: {email: string; symbol: string; timestamp: string; company: string; currentPrice: number; targetPrice: number; alertDoc: AlertItem;}
+    {email, symbol, timestamp, company, currentPrice, targetPrice, miniAlert}: {email: string; symbol: string; timestamp: string; company: string; currentPrice: number; targetPrice: number; miniAlert: AlertDirection;}
 ): Promise<void> => {
-    const direction = evaluateAlertDirection(alertDoc, currentPrice)
+    const direction = evaluateAlertDirection(miniAlert, currentPrice)
     switch (direction) {
         case "upper":
             await sendUpperAlertEmail({email, symbol, timestamp, company, currentPrice, targetPrice});
