@@ -39,6 +39,25 @@ describe("evaluateAlertDirection", () => {
         const result = evaluateAlertDirection(alert, currentPrice);
 
         expect(result).toBe("equal");
+<<<<<<< HEAD
     });
 
+=======
+    })
+
+    it("returns null when currentPrice is NOT greater than threshold", () => {
+        const alert = { condition: "Greater than", threshold: 300 } as const;
+        expect(evaluateAlertDirection(alert, 200)).toBeNull();
+    });
+
+    it("returns null when currentPrice equals threshold for 'Greater than'", () => {
+        const alert = { condition: "Greater than", threshold: 300 } as const;
+        expect(evaluateAlertDirection(alert, 300)).toBeNull();
+    });
+
+    it("throws on an invalid condition", () => {
+        const alert = { condition: "Invalid", threshold: 300 } as any;
+        expect(() => evaluateAlertDirection(alert, 350)).toThrow();
+    });
+>>>>>>> 04470e40df49d1990aa83ef44f2773b806b15b85
 })
