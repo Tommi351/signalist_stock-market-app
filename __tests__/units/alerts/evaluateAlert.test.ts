@@ -28,7 +28,7 @@ describe("evaluateAlertDirection", () => {
         expect(result).toBe("lower");
     })
 
-    it("returns equal when currentPrice is equal to threshold", () => {
+    it("returns equal when currentPrice is equal to than threshold", () => {
         const alert = {
             condition: "Equal to",
             threshold: 1000,
@@ -40,4 +40,19 @@ describe("evaluateAlertDirection", () => {
 
         expect(result).toBe("equal");
     })
+
+    it("returns null when currentPrice is NOT greater than threshold", () => {
+        const alert = { condition: "Greater than", threshold: 300 } as const;
+        expect(evaluateAlertDirection(alert, 200)).toBeNull();
+    });
+
+    it("returns null when currentPrice equals threshold for 'Greater than'", () => {
+        const alert = { condition: "Greater than", threshold: 300 } as const;
+        expect(evaluateAlertDirection(alert, 300)).toBeNull();
+    });
+
+    it("throws on an invalid condition", () => {
+        const alert = { condition: "Invalid", threshold: 300 } as any;
+        expect(() => evaluateAlertDirection(alert, 350)).toThrow();
+    });
 })
