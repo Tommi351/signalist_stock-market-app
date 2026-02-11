@@ -13,7 +13,7 @@ describe("evaluateAlertDirection", () => {
        const result = evaluateAlertDirection(alert, currentPrice);
 
         expect(result).toBe("upper");
-    })
+    });
 
     it("returns lower when currentPrice is less than threshold", () => {
         const alert = {
@@ -26,7 +26,7 @@ describe("evaluateAlertDirection", () => {
         const result = evaluateAlertDirection(alert, currentPrice);
 
         expect(result).toBe("lower");
-    })
+    });
 
     it("returns equal when currentPrice is equal to than threshold", () => {
         const alert = {
@@ -39,5 +39,6 @@ describe("evaluateAlertDirection", () => {
         const result = evaluateAlertDirection(alert, currentPrice);
 
         expect(result).toBe("equal");
-    })
+    });
+
 })

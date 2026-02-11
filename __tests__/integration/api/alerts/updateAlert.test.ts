@@ -7,7 +7,6 @@ import { connectDB } from "@/database/mongoose";
 import { auth } from "@/lib/better-auth/auth";
 import { revalidatePath } from "next/cache";
 import {headers} from "next/headers";
-import {POST} from "@/app/api/alerts/route";
 
 // ---- mocks ----
 vi.mock("@/database/mongoose", () => ({
@@ -63,7 +62,7 @@ describe("PUT /api/alerts/:id — Update Alert", () => {
 
 
         // 2️⃣ Act
-        const response = await POST(request);
+        const response = await PUT(request, { params: Promise.resolve({ id: "alert_123" }) });
         const data = await response.json();
 
         // 3️⃣ Assert
