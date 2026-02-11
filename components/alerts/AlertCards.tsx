@@ -33,7 +33,7 @@ const AlertCards = ({id, symbol, company, alertName, alertType, threshold, frequ
     const [open, setOpen] = useState(false);
 
     // For condition(>, < & =) text
-    const conditionText = getAlertText({alertType, threshold} as AlertDTO);
+    const conditionText = getAlertText({alertType, threshold} as AlertText);
 
     // For alerts editing and delete
 

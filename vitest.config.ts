@@ -11,6 +11,6 @@ export default defineConfig({
         reporters: "verbose",
         clearMocks: true,
         watch: false,
-        include: ["./__tests__/integration/**/*.test.{ts,tsk}"],
+        include: ['./__tests__/**/*.test.{ts,tsx}'],
     },
 });

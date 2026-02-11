@@ -144,23 +144,28 @@ export const sendUserAlertEmail = inngest.createFunction(
         // Step #1: Fetch Alert as source of truth
         const alertId = event.data.alertId;
 
-        const alertDoc = await step.run('fetch-alert', async () => {
-            const doc = await Alert.findById(alertId).lean<AlertItem>();
+        // FIX THIS
+        const alertDoc = await step.run('fetch-alert', async (): Promise<AlertItem> => {
+            const doc = await Alert.findById(alertId).lean();
             if (!doc) throw new Error(`Alert with id ${alertId} not found`);
             return doc;
         });
 
+        const miniAlert: AlertDirection = {
+            condition: alertDoc.condition,
+            threshold: alertDoc.threshold,
+        };
+
         // Step #2: Get user for alert email delivery
         const user = await step.run('get-user-for-alert-email', () => getUserForAlertsEmail(alertDoc.userId));
         if (!user) throw new Error(`User not found`);
-        // Step #3: TODO - Fetch current stock price
         // Step #3: Fetch current stock price
         const symbol = alertDoc.identifier;
         const stockDetails = await step.run('get-stock-details', () => getStocksDetails(symbol));
         const currentPrice = stockDetails.currentPrice;
 
         // Step #4: TODO - Evaluate Alert's condition
-        const direction = evaluateAlertDirection(alertDoc, currentPrice);
+        const direction = evaluateAlertDirection(miniAlert, currentPrice);
 
         if (!direction || direction === "equal") {
             console.log(`Alert for ${alertDoc.identifier} not triggered.`);
@@ -172,9 +177,9 @@ export const sendUserAlertEmail = inngest.createFunction(
                 const email = user.email;
                 const symbol = alertDoc.identifier;
                 const company = alertDoc.name;
-                const timestamp = alertDoc.updatedAt.toISOString();
+                const timestamp = alertDoc.updatedAt.toString();
 
-                return await sendAlertEmail({email, symbol, timestamp, company, currentPrice, targetPrice: alertDoc.threshold, alertDoc});
+                return await sendAlertEmail({email, symbol, timestamp, company, currentPrice, targetPrice: alertDoc.threshold, miniAlert});
             });
 
             return {success: true, message: 'Alert email sent successfully'};

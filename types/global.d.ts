@@ -179,11 +179,20 @@ declare global {
         symbol: string;
         company: string;
         alertName?: string;
-        alertType: "upper" | "lower";
+        alertType: "upper" | "lower" | "equal";
         threshold: number;
         frequency: AlertFrequency;
     }
 
+    type AlertDirection = {
+        condition: AlertCondition;
+        threshold: number;
+    }
+
+    type AlertText = {
+        alertType: 'upper' | 'lower' | 'equal',
+        threshold: number;
+    }
     type MarketNewsArticle = {
         id: number;
         headline: string;
@@ -213,7 +222,7 @@ declare global {
         symbol: string;
         company: string;
         alertName: string;
-        alertType: 'upper' | 'lower';
+        alertType: 'upper' | 'lower' | 'equal';
         condition: AlertCondition;
         threshold: number;
         frequency: AlertFrequency;

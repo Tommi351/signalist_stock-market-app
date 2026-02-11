@@ -1,6 +1,6 @@
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
-import {AlertItem} from "@/database/models/alert.model";
+
 
 export function cn(...inputs: ClassValue[]) {
     return twMerge(clsx(inputs));
@@ -126,9 +126,17 @@ export const formatDateToday = new Date().toLocaleDateString('en-US', {
 });
 
 
-export const getAlertText = (alert: AlertDTO) => {
-    const condition = alert.alertType === 'upper' ? '>' : '<';
-    return `Price ${condition} ${formatPrice(alert.threshold)}`;
+export const getAlertText = (alert: AlertText) => {
+    switch (alert.alertType) {
+        case "upper":
+            return `Price > ${formatPrice(alert.threshold)}`;
+        case "lower":
+            return `Price < ${formatPrice(alert.threshold)}`;
+        case "equal":
+            return `Price = ${formatPrice(alert.threshold)}`;
+        default:
+            return null;
+    }
 };
 
 export const getFormattedTodayDate = () => new Date().toLocaleDateString('en-US', {
@@ -139,7 +147,7 @@ export const getFormattedTodayDate = () => new Date().toLocaleDateString('en-US'
     timeZone: 'UTC',
 });
 
-export function evaluateAlertDirection(alert: AlertItem, currentPrice: number): "upper" | "lower" | "equal" | null {
+export function evaluateAlertDirection(alert: AlertDirection, currentPrice: number): "upper" | "lower" | "equal" | null {
     switch (alert.condition) {
         case "Greater than":
             return currentPrice > alert.threshold ? "upper" : null;

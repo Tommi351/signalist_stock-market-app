@@ -22,8 +22,8 @@ export async function GET() {
                     symbol: alert.identifier,
                     company: alert.name,
                     alertName: alert.name,
-                    condition: alert.condition === "Greater than" ? "Greater than" : "Less than",
-                    alertType: alert.condition === "Greater than" ? "upper" : "lower",
+                    alertType: alert.condition === "Greater than" ? "upper" : alert.condition === "Less than" ? "lower" : "equal",
+                    condition: alert.condition,
                     frequency: alert.frequency as AlertFrequency,
                     threshold: alert.threshold,
                 };
@@ -87,8 +87,8 @@ export async function POST(req: NextRequest) {
             symbol: newAlert.identifier,
             company: newAlert.name,
             alertName: newAlert.name,
-            condition: newAlert.condition === "Greater than" ? "Greater than" : "Less than",
-            alertType: newAlert.condition === "Greater than" ? "upper" : "lower",
+            alertType: newAlert.condition === "Greater than" ? "upper" : newAlert.condition === "Less than" ? "lower" : "equal",
+            condition: newAlert.condition,
             frequency: newAlert.frequency as AlertFrequency,
             threshold: newAlert.threshold,
         };
@@ -100,9 +100,9 @@ export async function POST(req: NextRequest) {
 
         revalidatePath("/watchlist");
 
-        return NextResponse.json({message: 'Alert created successfully', alert: alertDTOs}, {status: 201});
+        return NextResponse.json({success: true, message: 'Alert created successfully', alert: alertDTOs}, {status: 201});
     } catch (error) {
         console.error(error);
-        return NextResponse.json({message: 'Error creating alerts', error: error instanceof Error ? error.message : "Unknown"}, {status: 500});
+        return NextResponse.json({success: false, message: 'Error creating alerts', error: error instanceof Error ? error.message : "Unknown"}, {status: 500});
     }
 }

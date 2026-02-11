@@ -1,6 +1,6 @@
-import { Schema, model, models, type Document, type Model } from 'mongoose';
+import { Schema, model, models, type Model } from 'mongoose';
 
-export interface AlertItem extends Document {
+export interface AlertItem {
       userId: string;
       name: string;
       identifier: string;

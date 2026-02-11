@@ -9,7 +9,7 @@ import {
     CONDITION_OPTIONS, FREQUENCY_OPTIONS,
 } from "@/lib/constants";
 import {useAlerts} from "@/hooks/useAlerts";
-import {useRouter} from "next/navigation";
+import {useRouter} from 'next/navigation';
 import {toast} from "sonner";
 
 
@@ -37,6 +37,11 @@ const AlertForm = () => {
         try {
             const result = await createAlert(payload);
             if(result.success) {
+                toast.success("Alert created!");
+
+                // Refresh to clear client-side cache for the Server Component
+                router.refresh();
+                
                 router.push('/watchlist');
             }
         } catch (e) {
