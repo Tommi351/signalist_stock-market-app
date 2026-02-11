@@ -28,7 +28,7 @@ describe("evaluateAlertDirection", () => {
         expect(result).toBe("lower");
     })
 
-    it("returns equal when currentPrice is equal to than threshold", () => {
+    it("returns equal when currentPrice is equal to threshold", () => {
         const alert = {
             condition: "Equal to",
             threshold: 1000,
