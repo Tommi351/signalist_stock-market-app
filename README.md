@@ -1,61 +1,95 @@
-✨ Introduction
+# ✨ Signalist — AI-Powered Stock Market App
 
-AI-powered stock market app built with Next.js, Shadcn, Better Auth, and Inngest! Track real-time prices, set personalized alerts, explore company insights, and manage watchlists. The admin dashboard allows managing stocks, publishing news, and monitoring user activity, while event-driven workflows power automated alerts, AI-driven daily digests, earnings notifications, and sentiment analysis. Perfect for devs and traders who want a dynamic, real-time financial platform.
+AI-powered stock market app built with Next.js, shadcn/ui, Better Auth, and Inngest.
 
-⚙️ Tech Stack
+Track real-time prices, set personalized alerts, explore company insights, and manage watchlists.  
+An admin dashboard allows managing stocks, publishing news, and monitoring user activity.  
+Event-driven workflows power automated alerts, AI-driven daily digests, earnings notifications, and sentiment analysis.
 
-- Next.js (App Router)
-- TypeScript
-- MongoDB
-- Better Auth
-- Inngest (event-driven workflows)
-- Finnhub API (provides financial data on stocks, crypto and forex)
-- Nodemailer
-- TailwindCSS + shadcn/ui
-- CodeRabbit (automated PR reviews)
+Built for developers and traders who want a modern, real-time financial platform.
 
-🚀 Features
+---
 
-👉 Stock Dashboard: Track real-time stock prices with interactive line and candlestick charts, including historical data, and filter stocks by industry, performance, or market cap.
+## ⚙️ Tech Stack
 
-👉 Powerful Search: Quickly find the best stocks with an intelligent search system that helps you navigate through Signalist.
+- **Next.js (App Router)**
+- **TypeScript**
+- **MongoDB**
+- **Better Auth**
+- **Inngest** (event-driven workflows)
+- **Finnhub API** (financial market data)
+- **Nodemailer**
+- **TailwindCSS + shadcn/ui**
+- **CodeRabbit** (automated PR reviews)
 
-👉 Watchlist & Alerts: Create a personalized watchlist, set alert thresholds for price changes, and receive instant email notifications to stay on top of the market.
+---
 
-👉 Company Insights: Explore detailed financial data such as PE ratio, EPS, revenue, recent news, filings, analyst ratings, and sentiment scores for informed decision-making.
+## 🚀 Features
 
-👉 AI-Powered Summaries and Real-Time Workflows: Powered by Inngest, automate event-driven processes like price updates, alert scheduling, automated reporting, and AI-driven insights. Generate personalized market summaries, daily digests, and earnings report notifications, helping users track performance and make data-driven decisions.
+### 📊 Stock Dashboard
+Track real-time stock prices with interactive line and candlestick charts.  
+Filter stocks by industry, performance, or market cap.
 
-👉 Customizable Notifications: Fine-tune alerts and notifications based on user watchlists and preferences for a highly personalized experience.
+### 🔎 Powerful Search
+Quickly search and discover stocks through an intelligent search system.
 
-👉 Analytics & Insights: Gain insights into user behavior, stock trends, and engagement metrics, enabling smarter business and trading decisions.
+### ⭐ Watchlist & Alerts
+Create personalized watchlists and set price thresholds.  
+Receive instant email notifications when conditions are met.
 
-And many more, including code architecture and reusability.
+### 🏢 Company Insights
+View detailed financial metrics including:
+- PE Ratio
+- EPS
+- Revenue
+- Recent news
+- Filings
+- Analyst ratings
+- Sentiment scores
 
-🤸 Quick Start
-Follow these steps to set up the project locally on your machine.
+### ⚡ AI-Powered Workflows
+Powered by Inngest:
+- Automated alert scheduling
+- Event-driven price monitoring
+- AI-generated market summaries
+- Daily digests
+- Earnings notifications
 
-Prerequisites
+### 🔔 Customizable Notifications
+Fine-tune alerts based on user preferences.
 
-Make sure you have the following installed on your machine:
+### 📈 Analytics & Insights
+Monitor stock trends, user engagement, and system behavior.
 
-Git
-Node.js
-npm (Node Package Manager)
-Cloning the Repository
+---
 
+## 🤸 Quick Start
+
+### Prerequisites
+
+Make sure you have installed:
+
+- Git
+- Node.js
+- npm
+
+---
+
+### Clone the Repository
+
+```bash
 git clone https://github.com/Tommi351/signalist_stock-tracker-app.git
 cd signalist_stock-tracker-app
-Installation
 
-Install the project dependencies using npm:
+### Install Repository
 
+```bash
 npm install
-Set Up Environment Variables
 
-Create a new file named .env in the root of your project and add the following content:
+### Set up Environment Variables
 
-NODE_ENV='development'
+Create a .env file in the root directory and add:
+NODE_ENV=development
 NEXT_PUBLIC_BASE_URL=http://localhost:3000
 
 # FINNHUB
@@ -72,13 +106,15 @@ BETTER_AUTH_URL=http://localhost:3000
 # GEMINI
 GEMINI_API_KEY=
 
-#NODEMAILER
+# NODEMAILER
 NODEMAILER_EMAIL=
 NODEMAILER_PASSWORD=
-Replace the placeholder values with your real credentials. You can get these by signing up at: MongoDB, Gemini, Inngest, Finnhub.
 
-Running the Project
+Replace placeholer values with your real credentials
 
+### Run the project
+```bash
 npm run dev
 npx inngest-cli@latest dev
-Open http://localhost:3000 in your browser to view the project.
+
+Open on http://localhost:3000
