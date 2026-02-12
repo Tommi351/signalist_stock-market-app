@@ -1,7 +1,7 @@
 'use client'
 import {useEffect, useRef} from "react";
 
-const UseTradingViewWidget = (scriptUrl: string, config: Record<string, unknown>, height = 600) => {
+const UseTradingViewWidget = (scriptUrl: string | undefined, config: Record<string, unknown> | undefined, height?: number | undefined) => {
     const containerRef = useRef<HTMLDivElement | null>(null);
     useEffect(
         () => {
