@@ -79,7 +79,7 @@ export const sendLowerAlertEmail = async (
     const mailOptions = {
         from: `"Signalist" <signalist@jsmastery.pro>`,
         to: email,
-        subject: `${symbol}'s is below your target price`,
+        subject: `${symbol} is below your target price`,
         text: `Signalist Alerts are remarkable, huh?`,
         html: htmlTemplate,
     };
@@ -91,17 +91,17 @@ export const sendUpperAlertEmail = async (
     {email, symbol, timestamp, company, currentPrice, targetPrice}: {email: string; symbol: string; timestamp: string; company: string; currentPrice: number; targetPrice: number}
 ) => {
     const htmlTemplate = STOCK_ALERT_UPPER_EMAIL_TEMPLATE
-        .replace('{{symbol}}', symbol)
-        .replace('{{timestamp}}', timestamp)
-        .replace('{{company}}', company)
-        .replace('{{currentPrice}}', currentPrice.toString())
-        .replace('{{targetPrice}}', targetPrice.toString());
+        .replaceAll('{{symbol}}', symbol)
+        .replaceAll('{{timestamp}}', timestamp)
+        .replaceAll('{{company}}', company)
+        .replaceAll('{{currentPrice}}', currentPrice.toString())
+        .replaceAll('{{targetPrice}}', targetPrice.toString());
 
 
     const mailOptions = {
         from: `"Signalist" <signalist@jsmastery.pro>`,
         to: email,
-        subject: `${symbol}'s is above your target price`,
+        subject: `${symbol} is above your target price`,
         text: `Signalist Alerts are remarkable, huh?`,
         html: htmlTemplate,
     };

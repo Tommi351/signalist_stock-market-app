@@ -1,5 +1,5 @@
 import {inngest} from "@/lib/inngest/client";
-import {NEWS_SUMMARY_EMAIL_PROMPT, PERSONALIZED_WELCOME_EMAIL_PROMPT, UPPER_ALERT_SUMMARY_EMAIL_PROMPT, LOWER_ALERT_SUMMARY_EMAIL_PROMPT} from "@/lib/inngest/prompts";
+import {NEWS_SUMMARY_EMAIL_PROMPT, PERSONALIZED_WELCOME_EMAIL_PROMPT} from "@/lib/inngest/prompts";
 import {sendNewsSummaryEmail, sendWelcomeEmail, sendAlertEmail} from "@/lib/nodemailer";
 import {getAllUsersForNewsEmail} from "@/lib/actions/user.actions";
 import {getWatchlistSymbolsByEmail} from "@/lib/actions/watchlist.actions";
@@ -177,7 +177,7 @@ export const sendUserAlertEmail = inngest.createFunction(
                 const email = user.email;
                 const symbol = alertDoc.identifier;
                 const company = alertDoc.name;
-                const timestamp = alertDoc.updatedAt.toString();
+                const timestamp = new Date(alertDoc.updatedAt).toISOString();
 
                 return await sendAlertEmail({email, symbol, timestamp, company, currentPrice, targetPrice: alertDoc.threshold, miniAlert});
             });
