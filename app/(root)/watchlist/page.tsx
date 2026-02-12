@@ -1,3 +1,4 @@
+export const dynamic = "force-dynamic";
 import React from 'react';
 import {getWatchlistWithData, searchStocks} from "@/lib/actions/finnhub.actions";
 import SearchCommand from "@/components/SearchCommand";
